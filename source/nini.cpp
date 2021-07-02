@@ -35,10 +35,12 @@ cv::Mat img;
 static void update_max(int slider1, void*) {
     max = slider1;
 
-    cvSetTrackbarMax("Min", windowName.c_str(), max - 1);
-    if (min > max) {
-        cvSetTrackbarPos("Min", windowName.c_str(), max-1);
+    
+    //cvSetTrackbarMax("Min", windowName.c_str(), max - 1);
+    if (min >= max) {
+        cvSetTrackbarPos("Min", windowName.c_str(), 255+max-1);
     }
+
 
     float m = -min;
     float k = 255 / (max + m);
@@ -58,10 +60,13 @@ static void update_max(int slider1, void*) {
 static void update_min(int slider2, void*) {
     min = slider2;
 
-    cvSetTrackbarMin("Max", windowName.c_str(), min+1);
-    if (min > max) {
-        cvSetTrackbarPos("Max", windowName.c_str(), min+1);
+    
+    //cvSetTrackbarMin("Max", windowName.c_str(), min+1-255);
+    if (min-255 >= max) {
+        cvSetTrackbarPos("Max", windowName.c_str(), min+1-255);
     }
+    min = min - 255;
+
 
     float m = -min;
     float k = 255 / (max + m);
@@ -112,11 +117,8 @@ static void update_bind(int sliderB, void*) {
     }
     cmax = max;
     cmin = min;
-    cvSetTrackbarMax("Max", windowName.c_str(), cmax);
     cvSetTrackbarPos("Max", windowName.c_str(), cmax);
-    cvSetTrackbarMax("Min", windowName.c_str(), cmax-1);
-    cvSetTrackbarMin("Min", windowName.c_str(), cmin);
-    cvSetTrackbarPos("Min", windowName.c_str(), cmin);
+    cvSetTrackbarPos("Min", windowName.c_str(), cmin+255);
     
     float m = -min;
     float k = 255 / (max + m);
@@ -188,13 +190,11 @@ int main()
     slider2 = cmin;
     slider1 = cmax;
     cv::createTrackbar("Binning", windowName, &sliderB, 100, update_bind);
-    cv::createTrackbar("Max", windowName, &slider1, cmax, update_max);
-    cv::createTrackbar("Min", windowName, &slider2, cmin, update_min);
-    cvSetTrackbarMax("Max", windowName.c_str(), cmax);
+    cv::createTrackbar("Max", windowName, &slider1, cmax*2, update_max);
+    cv::createTrackbar("Min", windowName, &slider2, 255+cmax-1, update_min);
+
     cvSetTrackbarPos("Max", windowName.c_str(), cmax);
-    cvSetTrackbarMax("Min", windowName.c_str(), cmax - 1);
-    cvSetTrackbarMin("Min", windowName.c_str(), cmin);
-    cvSetTrackbarPos("Min", windowName.c_str(), cmin);
+    cvSetTrackbarPos("Min", windowName.c_str(), cmin+255);
 
     update_max(max, 0);
 
