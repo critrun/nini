@@ -17,3 +17,6 @@ This has been tested to successfully compile in visual studio 2019 v142 with Win
 **Max** dictates where the brightness maxes out and becomes blown out.
 
 **Min** the opposite of Max.
+
+## Disclaimer
+I will not maintain this repository. This was just something I made because I was bored.
